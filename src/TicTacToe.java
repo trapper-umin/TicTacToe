@@ -16,16 +16,32 @@ public class TicTacToe {
         while (true){
             System.out.print("Enter your placement (1-9): ");
             int playerPosition=keyboard.nextInt();
+            while (playerPositions.contains(playerPosition) || cpuPositions.contains(playerPosition) || playerPosition>9){
+                System.out.print("Position taken! Enter a correct position: ");
+                playerPosition=keyboard.nextInt();
+            }
 
             placePiece(board,playerPosition,"player");
 
+            String result =checkWinner();
+            if(result.length()>0){
+                System.out.println(result);
+                break;
+            }
+
             int cpuPosition=random.nextInt(9)+1;
+            while (cpuPositions.contains(cpuPosition) || playerPositions.contains(cpuPosition)){
+                cpuPosition=random.nextInt(9)+1;
+            }
             placePiece(board,cpuPosition,"cpu");
 
             printTicTacToeBoard(board);
 
-            String result =checkWinner();
-            System.out.println(result);
+            result =checkWinner();
+            if(result.length()>0){
+                System.out.println(result);
+                break;
+            }
         }
     }
     public static void printTicTacToeBoard(char[][] board){
@@ -103,9 +119,9 @@ public class TicTacToe {
         winning.add(crossTwo);
 
         for (List list : winning){
-            if (playerPositions.contains(list)){
+            if (playerPositions.containsAll(list)){
                 return "Congratulation you won!";
-            }else if (cpuPositions.contains(list)){
+            }else if (cpuPositions.containsAll(list)){
                 return "CPU won! Sorry:(";
             }else if(playerPositions.size()+cpuPositions.size()==9){
                 return "CAT!";
